@@ -682,12 +682,6 @@
     }
   }
 
-  function isStepValid() {
-    if (currentStep === 0) return !!formData.condition;
-    if (currentStep === 1) return !!formData.service;
-    return true;
-  }
-
   function updateNav() {
     document.getElementById('btnBack').disabled = currentStep === 0;
     const btn = document.getElementById('btnNext');
@@ -744,12 +738,34 @@
     });
   }
 
-  async function submitForm() {
-    const btn = document.getElementById('btnNext');
-    btn.classList.add('loading');
-    btn.disabled = true;
+  function isStepValid() {
+  return true;
+}
 
-    const body = `
+function getMissingFields() {
+  const missing = [];
+  if (!formData.name) missing.push('Full Name');
+  if (!formData.email) missing.push('Email');
+  if (!formData.phone) missing.push('Phone');
+  if (!formData.address) missing.push('Address');
+  if (!formData.postalCode) missing.push('Postal Code');
+  if (!formData.condition) missing.push('Deck Condition');
+  if (!formData.service) missing.push('Service Type');
+  return missing;
+}
+
+async function submitForm() {
+  const missing = getMissingFields();
+  if (missing.length > 0) {
+    alert(`Please fill in the following before submitting:\n\n• ${missing.join('\n• ')}`);
+    return;
+  }
+
+  const btn = document.getElementById('btnNext');
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  const body = `
 New Quote Request from StainCraft Ottawa
 
 Name: ${formData.name}
@@ -767,26 +783,26 @@ Wood Species: ${formData.woodSpecies.length ? formData.woodSpecies.join(', ') : 
 
 Additional Notes:
 ${formData.notes || 'None'}
-    `.trim();
+  `.trim();
 
-    try {
-      await emailjs.send('service_w3css37', 'template_q79ravn', {
-        to_email: 'ottawastaincraft@gmail.com',
-        subject: `New Quote Request – ${formData.name} (${formData.size} sq ft)`,
-        message: body,
-        from_name: formData.name,
-        reply_to: formData.email
-      });
+  try {
+    await emailjs.send('service_w3css37', 'template_q79ravn', {
+      to_email: 'ottawastaincraft@gmail.com',
+      subject: `New Quote Request – ${formData.name} (${formData.size} sq ft)`,
+      message: body,
+      from_name: formData.name,
+      reply_to: formData.email
+    });
 
-      document.getElementById('quotePage').style.display = 'none';
-      document.getElementById('successScreen').classList.add('show');
-    } catch (err) {
-      console.error('EmailJS error:', err);
-      btn.classList.remove('loading');
-      btn.disabled = false;
-      alert('Something went wrong sending your quote. Please try again or email us directly at ottawastaincraft@gmail.com');
-    }
+    document.getElementById('quotePage').style.display = 'none';
+    document.getElementById('successScreen').classList.add('show');
+  } catch (err) {
+    console.error('EmailJS error:', err);
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    alert('Something went wrong sending your quote. Please try again or email us directly at ottawastaincraft@gmail.com');
   }
+}
 
   // Init
   updateNav();
