@@ -438,7 +438,7 @@
     </div>
     <h2 class="success-title">Quote Submitted</h2>
     <p class="success-subtitle">We'll reach out within 24 hours to schedule your free on-site assessment.</p>
-    <a href="/" class="btn btn-outline">
+    <a href="index.html" class="btn btn-outline">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
       Back to Home
     </a>
@@ -685,7 +685,6 @@
   function isStepValid() {
     if (currentStep === 0) return !!formData.condition;
     if (currentStep === 1) return !!formData.service;
-    if (currentStep === 4) return formData.name && formData.email && formData.phone && formData.address && formData.postalCode;
     return true;
   }
 
