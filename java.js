@@ -122,3 +122,16 @@ finishButtons.forEach((btn, i) => {
   btn.addEventListener('click', () => switchFinish(i));
 });
 
+// ============================================================
+// SMOOTH NAV SCROLLING
+// ============================================================
+document.querySelectorAll('nav a[href^="/#"], nav a[href^="#"]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    const href = link.getAttribute('href');
+    const id = href.replace('/#', '').replace('#', '');
+    const target = document.getElementById(id);
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
