@@ -125,7 +125,14 @@ finishButtons.forEach((btn, i) => {
 // ============================================================
 // SMOOTH NAV SCROLLING
 // ============================================================
-document.querySelectorAll('nav a[href^="/#"], nav a[href^="#"]').forEach(link => {
+document.querySelectorAll('nav a[href^="/#"], nav a[href^="#"], nav a[href="/"]').forEach(link => {
+  if (link.getAttribute('href') === '/') {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    return;
+  }
   link.addEventListener('click', (e) => {
     const href = link.getAttribute('href');
     const id = href.replace('/#', '').replace('#', '');
